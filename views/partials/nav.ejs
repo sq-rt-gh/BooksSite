@@ -1,0 +1,102 @@
+<link rel="shortcut icon" href="/pics/icon.webp">
+
+<style>
+    body {
+        background-color: darkolivegreen;
+        margin: 0;
+        padding: 0;
+    }
+
+    header {
+        background-color: black;
+        padding: 10px;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 30px;
+        font-size: 14pt;
+
+        img {
+            max-height: 40px;
+            border-radius: 30px;
+        }
+    }
+
+    #about-a:hover>div {
+        display: initial;
+    }
+
+    #about-div {
+        position: absolute;
+        left: 50px;
+        top: 60px;
+        width: 50%;
+        background-color: rgb(37, 37, 37);
+        color: white;
+        padding: 15px;
+        border-radius: 10px;
+        box-shadow: 6px 6px 15px rgba(0, 0, 0, 1);
+        display: none;
+
+        p {
+            text-align: justify;
+        }
+    }
+
+    nav {
+        a {
+            text-decoration: none;
+            color: white;
+            margin-right: 10px;
+            transition: all 0.2s ease-in-out;
+        }
+
+        a:hover {
+            color: green;
+        }
+    }
+
+    .search {
+        display: flex;
+        align-items: center;
+        gap: 3px;
+
+        input {
+            font-size: 12pt;
+            padding: 2px 5px;
+        }
+
+        button {
+            padding: 2px;
+            font-size: 10pt;
+        }
+    }
+</style>
+
+
+<img src="/pics/icon.webp">
+<nav>
+    <a href="/">Каталог</a>
+    <a href="/feedback">Обратная связь</a>
+    <a href="#" id="about-a">О сайте
+        <div id="about-div">
+            <p>
+                Добро пожаловать на наш сайт, посвященный увлекательному миру книг! Мы страстно увлечены
+                литературой и верим, что каждая книга способна изменить мир вокруг нас.
+            </p>
+            <p>
+                Наша миссия - поделиться с вами нашей любовью к чтению, представить увлекательные обзоры,
+                рекомендации и новости о литературных событиях. Здесь вы найдете широкий выбор рецензий на самые
+                разнообразные жанры - от классической литературы до современных бестселлеров.
+                Мы стремимся создать сообщество книголюбов, где каждый найдет что-то особенное для себя.
+            </p>
+            <p>
+                Присоединяйтесь к нам в путешествии по страницам книг, делимся впечатлениями и вдохновляем друг
+                друга
+                на новые литературные открытия. Добро пожаловать в мир слов и историй, где каждая книга - это
+                новое приключение!
+            </p>
+
+        </div>
+    </a>
+</nav>

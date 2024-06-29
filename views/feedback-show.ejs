@@ -1,0 +1,43 @@
+<head>
+    <title>Панель администратора</title>
+    <style>
+        table {
+            margin: 30 auto;
+            padding: 10;
+            border-radius: 10px;
+            background-color: silver;
+            * {
+                font-size: 14pt;
+            }
+        }
+        
+        .td {
+            padding: 5 25;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <%- include('partials/nav.ejs') %>
+        <%- include('partials/btns.ejs') %>
+    </header>
+
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Feedback</th>
+        </tr>
+        <tr><td colspan="3"><hr style="height: 1pt; background-color: black;"></td></tr>
+        <% data.forEach(function(fb) { %>
+        <tr>
+            <td class="td"><%=fb.name %></td>
+            <td class="td"><%=fb.email %></td>
+            <td class="td"><%=fb.comment %></td>
+        </tr>
+        <tr><td colspan="3"><hr></td></tr>
+        <% }); %>
+    </table>
+    
+</body>

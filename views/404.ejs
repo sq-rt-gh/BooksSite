@@ -1,0 +1,43 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Страница не найдена</title>
+    <style>
+        .container {
+            width: fit-content;
+            margin: 60px auto;
+            padding: 10px 40px;
+            border-radius: 10px;
+            text-align: center;
+            background-color: silver;
+
+            h1 {
+                font-size: 3em;
+                margin-bottom: 10px;
+                color: #333;
+            }
+
+            p {
+                font-size: 1.2em;
+                color: #666;
+            }
+
+            a {
+                color: #007bff;
+                text-decoration: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <%- include('partials/nav.ejs') %>
+    </header>
+
+    <div class="container">
+        <h1>404 - Страница не найдена</h1>
+        <p>Похоже, запрашиваемая Вами страница не найдена...</p>
+        <p><a href="/">Вернуться на главную страницу</a></p>
+    </div>
+</body>

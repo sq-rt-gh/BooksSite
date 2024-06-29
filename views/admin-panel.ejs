@@ -1,0 +1,199 @@
+<head>
+    <title>Панель администратора</title>
+    <style>
+        #msg {
+            font-size: 18pt;
+            margin: 150 auto -150;
+            text-align: center;
+        }
+
+        .choose {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border: 1pt solid black;
+            border-radius: 20px;
+            width: fit-content;
+            margin: 200 auto;
+            padding: 20px;    
+            background-color: silver;
+        }
+
+        button {
+            font-size: 18pt;
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            width: 220px;
+            margin: 10 auto;
+            display: block;
+        }
+
+        .hide {
+            display: none;
+        }
+
+        .form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            width: fit-content;
+            margin: 20 auto;
+            padding: 20;
+            border-radius: 10px;
+            background-color: silver;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 1);
+
+            * {
+                font-size: 16pt;
+            }
+        }
+
+        .add {
+            margin-top: 100px;
+        }
+
+        .edit {
+            width: fit-content;
+            margin: 100 auto;
+
+            * {
+                font-size: 16pt;
+            }
+        }
+    </style>
+
+    <script src="/jquery.js"></script>
+    <script>
+        const booksData = {
+            //<% books.forEach(function(book) { %>
+            "<%= book.id %>": {
+                name: "<%= book.name %>",
+                author: "<%= book.author %>",
+                img: "<%= book.img %>",
+                descr: `<%= book.description %>`
+            },
+            //<% }) %>
+        };
+    </script>
+    <script>
+        function ShowMenu() {
+            $("#choose").removeClass("hide")
+            $("#add").addClass("hide")
+            $("#edit").addClass("hide")
+            $("#delete").addClass("hide")
+        }
+
+        function ShowAdd() {
+            $("#choose").addClass("hide")
+            $("#msg").addClass("hide")
+            $("#add").removeClass("hide")
+        }
+
+        function ShowEdit() {
+            $("#choose").addClass("hide")
+            $("#msg").addClass("hide")
+            $("#edit").removeClass("hide")
+        }
+
+        function ShowDel() {
+            $("#choose").addClass("hide")
+            $("#msg").addClass("hide")
+            $("#delete").removeClass("hide")
+        }
+
+        function CheckAddFields() {
+            if ($("#add-name").val() == "" || $("#add-author").val() == "" || $("#add-img").val() == "" || $("#add-descr").val() == "") {
+                $("#add-btn").attr('disabled', true);
+            }
+            else {
+                $("#add-btn").attr('disabled', false);
+            }
+        }
+        
+        function CheckEditFields() {
+            if ($("#edit-select").val() == null || $("#edit-name").val() == "" || $("#edit-author").val() == "" || $("#edit-img").val() == "" || $("#edit-descr").val() == "") {
+                $("#edit-btn").attr('disabled', true);
+            }
+            else {
+                $("#edit-btn").attr('disabled', false);
+            }
+        }
+
+        function ChooseBook() {
+            let id = $("#edit-select").val()
+            $("#edit-id").val(id)
+            $("#edit-name").val(booksData[id].name)
+            $("#edit-author").val(booksData[id].author)
+            $("#edit-img").val(booksData[id].img)
+            $("#edit-descr").val(booksData[id].descr)
+        }
+    </script>
+</head>
+
+<body>
+    <header>
+        <%- include('partials/nav.ejs') %>
+        <%- include('partials/btns.ejs') %>
+    </header>
+
+    <% if(msg !="" ) { %><div id="msg"><%=msg%></div><% } %>
+
+    <div id="choose" class="choose">
+        <button onclick="ShowAdd()" style="background-color: lightgreen;">Добавить</button>
+        <button onclick="ShowEdit()" style="background-color: orange">Редактировать</button>
+        <button onclick="ShowDel()" style="background-color: red">Удалить</button>
+        <br>
+        <button onclick="window.location='admin-panel/feedback'" style="background-color: lightskyblue">Обратная связь</button>
+    </div>
+
+
+    <div id="add" class="add hide">
+        <form action="/admin-panel/add" method="POST" class="form">
+            <span>Название<br><input type="text" name="name" id="add-name" oninput="CheckAddFields()"></span>
+            <span>Автор<br><input type="text" name="author" id="add-author" oninput="CheckAddFields()"></span>
+            <span>Картинка<br><input type="text" name="img" id="add-img" oninput="CheckAddFields()"></span>
+            <span>Описание<br><textarea name="descr" id="add-descr" oninput="CheckAddFields()" rows="4"></textarea></span>
+            <input type="submit" value="Добавить" id="add-btn" disabled>
+        </form>
+        
+        <button onclick="ShowMenu()">Назад</button>
+    </div>
+
+    <div id="edit" class="edit hide">
+        <select id="edit-select" onchange="ChooseBook()">
+            <option disabled selected value="">Выберите книгу</option>
+            <% books.forEach(function(book) { %>
+                <option value="<%= book.id %>">
+                    <%= book.name %> (<%= book.author %>)
+                </option>
+                <% }); %>
+        </select>
+
+        <form action="/admin-panel/edit" method="POST" id="edit-form" class="form">
+            <input type="hidden" name="id" id="edit-id">
+            <span>Название<br><input type="text" name="name" id="edit-name" oninput="CheckEditFields()"></span>
+            <span>Автор<br><input type="text" name="author" id="edit-author" oninput="CheckEditFields()"></span>
+            <span>Картинка<br><input type="text" name="img" id="edit-img" oninput="CheckEditFields()"></span>
+            <span>Описание<br><textarea name="descr" id="edit-descr" rows="4" oninput="CheckEditFields()"></textarea></span>
+            <input type="submit" value="Сохранить" id="edit-btn" disabled>
+        </form>
+
+        <button onclick="ShowMenu()">Назад</button>
+    </div>
+
+    <div id="delete" class="delete hide">
+        <form action="/admin-panel/delete" method="POST" class="form">
+            <% books.forEach(function(book) { %>
+                <span>
+                    <input type="checkbox" name="books" id="" value="<%= book.id %>">
+                    <%= book.name %> (<%= book.author %>)
+                </span>
+                <% }); %>
+
+                    <input type="submit" value="Удалить">
+        </form>
+
+        <button onclick="ShowMenu()">Назад</button>
+    </div>
+</body>

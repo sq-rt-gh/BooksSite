@@ -1,0 +1,40 @@
+<style>
+    .login-btn:hover {
+        background-color: lightblue;
+    }
+
+    .logout-btn:hover {
+        background-color: orangered;
+    }
+
+    .admin-btn:hover {
+        background-color: yellow;
+    }
+
+    .login-span {
+        margin-left: auto;
+        color: white;
+
+        a {
+            text-decoration: none;
+            padding: 5px 15px;
+            margin: 0 5;
+            border-radius: 10px;
+            background-color: whitesmoke;
+            color: black;
+            transition: all 0.4s ease-in-out;
+        }
+    }
+</style>
+
+<span class="login-span">
+    <% if(session.isActive) { %>
+        <%= session.name %>
+            <% if (session.role=="A" ) { %>
+                <a href="/admin-panel" class="admin-btn">Редактировать</a>
+                <% } %>
+                    <a href="/logout" class="logout-btn">Выйти</a>
+                    <%} else { %>
+                        <a href="/login" class="login-btn">Войти</a>
+                        <% } %>
+</span>

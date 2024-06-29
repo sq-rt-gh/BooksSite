@@ -1,0 +1,84 @@
+<head>
+    <title>Обратная связь</title>
+    <style>
+        .container {
+            width: fit-content;
+            margin: 60px auto;
+            padding: 10px 40px;
+            border-radius: 10px;
+            text-align: center;
+            background-color: silver;
+
+            p {
+                font-size: 16pt;
+            }
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+
+            * {
+                font-size: 14pt;
+            }
+
+            textarea {
+                width: 240px;
+                min-width: 240px;
+                min-height: 30px;
+            }
+        }
+    </style>
+
+    <script src="/jquery.js"></script>
+    <script>
+        function Check() {
+            if ($("#name").val() == "" || $("#email").val() == "" || $("#comment").val() == "") {
+                $("#btn").attr('disabled', true);
+            }
+            else {
+                $("#btn").attr('disabled', false);
+            }
+        }
+
+        function Send(event) {
+            event.preventDefault();
+
+            $.ajax({
+                url: "/feedback",
+                type: "POST",
+                data: {
+                    name: $("#name").val(),
+                    email: $("#email").val(),
+                    comment: $("#comment").val()
+                },
+                success: (data) => {
+                    if (data == 'ok')
+                        $(".container").html("<p>Ваша заявка принята!</p>")
+                    else
+                        alert("Произошла ошибка :(\n" + data)
+                }
+            })
+
+        }
+    </script>
+</head>
+
+<body>
+    <header>
+        <%- include('partials/nav.ejs') %>
+        <%- include('partials/btns.ejs') %>
+    </header>
+
+    <div class="container">
+        <p>Заполните форму для обратной связи</p>
+        <form onsubmit="Send(event)">
+            <input type="text" id="name" oninput="Check()" placeholder="Ваше имя" value="<%= session.name %>">
+            <input type="text" id="email" oninput="Check()" placeholder="Email">
+            <textarea id="comment" oninput="Check()" rows="3" placeholder="Комментарий"></textarea>
+            <input type="submit" id="btn" value="Отправить" disabled>
+        </form>
+    </div>
+</body>

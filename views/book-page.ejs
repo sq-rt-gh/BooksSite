@@ -1,0 +1,135 @@
+<head>
+    <title><%= book.name %></title>
+    <style>
+        .container {
+            margin: 0 70;
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+
+            img {
+                width: 350;
+                border-radius: 10px;
+            }
+
+        }
+        
+        .info {
+            max-width: 50%;
+
+            h2 {
+                font-size: 32pt;
+                text-align: center;
+                margin: 20 0 10 0;
+            }
+
+            h3 {
+                font-size: 20pt;
+                font-weight: normal;
+                text-align: center;
+                margin: 0 0 50px 0;
+            }
+
+            p {
+                font-size: 16pt;
+                text-align: justify;
+            }
+        }
+
+        .rating {
+            margin-top: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+
+            * {
+                font-size: 14pt;
+            }
+
+            button {
+                border: none;
+                border-radius: 10px;
+                padding: 3px;
+            }
+        }
+
+        .hide {
+            display: none;
+        }
+
+        #rate-input {
+            width: 140px;
+            border: none;
+            border-radius: 10px;
+            padding: 3px;
+        }
+    </style>
+
+    <script src="/jquery.js"></script>
+    <script>
+        let book_id = "<%= book.id %>";
+        function SaveRating() {
+            $.ajax({
+                url: "/rating",
+                type: "POST",
+                data: {
+                    book: book_id,
+                    rating: $("#rate-input").val(),
+                },
+                success: (data) => {
+                    if (data == 'ok') {
+                        $("#rating-msg").html("Ваша оценка: " + $("#rate-input").val())
+                        $("#rating").removeClass("hide");
+                        $("#rating-change").addClass("hide");
+                    }
+                    else
+                        alert("Произошла ошибка :(\n" + data)
+                }
+            })
+        }
+
+        function Change() {
+            $("#rating").addClass("hide");
+            $("#rating-change").removeClass("hide");
+        }
+
+        function Check() {
+            if ($("#rate-input").val() == "" || Number($("#rate-input").val()) < 1  || Number($("#rate-input").val()) > 10 ) {
+                $("#rate-btn").attr('disabled', true);
+            }
+            else {
+                $("#rate-btn").attr('disabled', false);
+            }
+        }
+    </script>
+</head>
+
+<body>
+    <header>
+        <%- include('partials/nav.ejs') %>
+        <%- include('partials/btns.ejs') %>
+    </header>
+
+    <div class="container">
+        <img src="<%= '/pics/' + book.img %>" alt="<%= book.name %>">
+        <div class="info">
+            <h2><%= book.name %></h2>
+            <h3><%= book.author %></h3>
+            <hr>
+            <p><%= book.description %></p>
+            <hr>
+
+            <% if(session.isActive) { %>
+            <div id="rating" class="rating">
+                <span id="rating-msg"><%= (rating ? "Ваша оценка: "+rating.rate : "Вы еще не поставили оценку") %></span>
+                <button onclick="Change()"><%= (rating ? "Изменить" : "Оценить") %></button>
+            </div>
+            <div id="rating-change" class="rating hide">
+                <input type="number" id="rate-input" min="1" max="10" value="<%= (rating ? rating.rate : '') %>" placeholder="Ваша оценка" oninput="Check()">
+                <button id="rate-btn" disabled onclick="SaveRating()">Сохранить</button>
+            </div>
+            <% } %>
+        </div>
+    </div>
+</body>

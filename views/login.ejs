@@ -1,0 +1,124 @@
+<head>
+    <title>Авторизация</title>
+    <style>
+        .container {
+            display: flex;
+            height: 80%;
+        }
+
+        form {
+            max-width: 300px;
+            margin: auto;
+            padding: 20px;
+            border: 1pt solid black;
+            border-radius: 10pt;
+            background-color: silver;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+
+            * {
+                font-size: 16pt;
+            }
+        }
+
+        input {
+            padding: 2px 5px;
+        }
+    </style>
+
+    <script src="/jquery.js"></script>
+    <script>
+        let hidden = true;
+
+        function Switch(e) {
+            e.preventDefault();
+            $(".hide").attr("hidden", !hidden);
+            if (hidden) {
+                $("#msg").html("Регистрация");
+                $("#reg").html("Войти");
+                $("[type=submit]").val("Создать аккаунт");
+            }
+            else {
+                $("#msg").html("Авторизация");
+                $("#reg").html("Регистрация");
+                $("[type=submit]").val("Войти");
+            }
+            hidden = !hidden;
+        }
+
+        function Check() {
+            if ($('#login').val() == "" || $("#pswd").val() == "") {
+                $('#msg').html("Заполните все поля!");
+                return false;
+            }
+
+            if (!hidden) {
+                if ($('#name').val() == "") {
+                    $('#msg').html("Заполните все поля!");
+                    return false;
+                }
+                if ($('#pswd').val() != $('#pswd2').val()) {
+                    $('#msg').html("Пароли не совпадают!");
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        function Login(e) {
+            e.preventDefault();
+            $("#msg").html("");
+            if (Check()) {
+                $.ajax({
+                    url: "/login",
+                    type: "POST",
+                    data: {
+                        isLogin: hidden,
+                        login: $("#login").val(),
+                        pswd: $("#pswd").val(),
+                        name: $("#name").val()
+                    },
+                    success: (data) => {
+                        if (data == "ok") window.location = "/";
+
+                        $("#msg").html(data);
+                    }
+                });
+            }
+        }
+    </script>
+</head>
+
+<header>
+    <%- include('partials/nav.ejs') %>
+</header>
+
+<div class="container">
+    <form onsubmit="Login(event)">
+        <span id="msg">Авторизация</span>
+        <span>
+            <label for="login">Логин</label><br>
+            <input type="text" id="login">
+        </span>
+        <span class="hide" hidden>
+            <label for="name">Имя</label><br>
+            <input type="text" id="name">
+        </span>
+        <span>
+            <label for="pswd">Пароль</label><br>
+            <input type="password" id="pswd">
+        </span>
+        <span class="hide" hidden>
+            <label for="pswd2">Подтверждение пароля</label><br>
+            <input type="password" id="pswd2">
+        </span>
+
+        <input type="submit" value="Войти">
+
+        <span><a href="/">На главную</a> | <a href="#" id="reg" onclick="Switch(event)">Регистрация</a></span>
+    </form>
+</div>
